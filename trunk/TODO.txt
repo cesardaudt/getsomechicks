@@ -1,1 +1,7 @@
-O caio é viado mas é meu amigo
+Pacotes:
+	IA
+	Jogo
+		classes:
+			Jogador
+			Galinha
+	Interface
