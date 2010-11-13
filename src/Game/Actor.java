@@ -35,16 +35,17 @@ public abstract class Actor {
 		this.speed = speed;
 	}
 	
-	public void setPos(double pos_x, double pos_y) {
-		
-	}
-	
-	public void setDirection(double dir_x, double dir_y) {
-		
-	}
-	
 	public void setOrientation(double orientation) {
 		this.orientation = orientation;
+		
+		//maybe Java math has some problems with sin and cos greater than 360 or smaller than 0
+		//so we've to limit the orientation values
+		if(this.orientation >= 360) {
+			this.orientation -= 360;
+		}
+		else if(this.orientation < 0) {
+			this.orientation += 360;
+		}
 		this.direction_x = Math.cos(this.orientation * (Math.PI/180));
 		this.direction_y = Math.sin(this.orientation * (Math.PI/180));
 		
