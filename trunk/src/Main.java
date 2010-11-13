@@ -44,6 +44,7 @@ public class Main {
 			//does nothing
 			default:
 				player.setSpeed(0);
+				player.move();
 		}
 	}
 	
