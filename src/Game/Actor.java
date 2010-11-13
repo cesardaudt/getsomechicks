@@ -5,6 +5,7 @@ public abstract class Actor {
 	protected double speed;
 	protected double pos_x;
 	protected double pos_y;
+	//direction_x and direction_y represents the vector to where the actor is pointing
 	protected double direction_x;
 	protected double direction_y;
 	protected double orientation;
@@ -14,19 +15,24 @@ public abstract class Actor {
 		this.pos_x = pos_x;
 		this.pos_y = pos_y;
 		this.speed = 0;
-		this.direction_x = 0;
-		this.direction_y = 0;
-		this.orientation = 0;
+		//creates the actor pointing to 90 degrees
+		this.orientation = 90;
+		//we need to transform the orientation to radians, in order to use cosine and sine functions
+		this.direction_x = Math.cos(this.orientation * (Math.PI/180));
+		this.direction_y = Math.sin(this.orientation * (Math.PI/180));
+		
 		
 	}
 	
-	public void move(double pos_x, double pos_y) {
-		
+	//given a point in 2-d, moves the actor
+	public void move() {
+		this.pos_x += this.speed * this.direction_x;
+		this.pos_y += this.speed * this.direction_y;
 	}
 
 	//Setters
 	public void setSpeed(double speed) {
-		
+		this.speed = speed;
 	}
 	
 	public void setPos(double pos_x, double pos_y) {
@@ -38,6 +44,9 @@ public abstract class Actor {
 	}
 	
 	public void setOrientation(double orientation) {
+		this.orientation = orientation;
+		this.direction_x = Math.cos(this.orientation * (Math.PI/180));
+		this.direction_y = Math.sin(this.orientation * (Math.PI/180));
 		
 	}
 	
