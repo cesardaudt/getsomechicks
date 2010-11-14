@@ -5,10 +5,12 @@ public abstract class Actor {
 	protected double speed;
 	protected double pos_x;
 	protected double pos_y;
-	//direction_x and direction_y represents the vector to where the actor is pointing
+	protected double orientation;
+	//direction_x and direction_y represents a normalized vector to where the actor is pointing
 	protected double direction_x;
 	protected double direction_y;
-	protected double orientation;
+	protected int lives;
+	protected int health;
 		
 	public Actor(double pos_x, double pos_y) {
 		
@@ -18,16 +20,32 @@ public abstract class Actor {
 		//creates the actor pointing to 90 degrees
 		this.orientation = 90;
 		//we need to transform the orientation to radians, in order to use cosine and sine functions
-		this.direction_x = Math.cos(this.orientation * (Math.PI/180));
-		this.direction_y = Math.sin(this.orientation * (Math.PI/180));
-		
-		
+		this.direction_x = Math.cos(Math.toRadians(this.orientation));
+		this.direction_y = Math.sin(Math.toRadians(this.orientation));
+		this.lives = 1;
+		this.health = 100;		
 	}
 	
 	//given a point in 2-d, moves the actor
 	public void move() {
+		
 		this.pos_x += this.speed * this.direction_x;
 		this.pos_y += this.speed * this.direction_y;
+		
+		//here we see if we passed the limits of the game area		
+		if(this.speed * this.direction_x < 0) {
+			this.pos_x = 0;
+		}
+		else if(this.speed * this.direction_x >= World.WIDTH) {
+			this.pos_x = World.WIDTH - 1;
+		}
+		
+		if(this.speed * this.direction_y < 0) {
+			this.pos_y = 0;
+		}
+		else if(this.speed * this.direction_y >= World.HEIGHT) {
+			this.pos_y = World.HEIGHT - 1;
+		}
 	}
 
 	//Setters
@@ -46,8 +64,8 @@ public abstract class Actor {
 		else if(this.orientation < 0) {
 			this.orientation += 360;
 		}
-		this.direction_x = Math.cos(this.orientation * (Math.PI/180));
-		this.direction_y = Math.sin(this.orientation * (Math.PI/180));
+		this.direction_x = Math.cos(Math.toRadians(this.orientation));
+		this.direction_y = Math.sin(Math.toRadians(this.orientation));
 		
 	}
 	

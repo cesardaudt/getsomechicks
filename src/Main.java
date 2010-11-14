@@ -2,12 +2,14 @@ import java.io.IOException;
 
 import Game.Chicken;
 import Game.Player;
+import Game.World;
 
 
 public class Main {
 
-	private static final double INCREMENT_SPEED = 5;
-	private static final double ROTATION_INCREMENT = 10;
+	private static final double INCREMENT_SPEED = 10;
+	private static final double ROTATION_INCREMENT = 5;
+	private static World world;
 
 	public static void inputFromUser(Player player) {
 	
@@ -57,17 +59,28 @@ public class Main {
 //	}
 	
 	public static void main(String[] args) {
-		System.out.println("hello");
+
+		world = new World();
 		
-		Player player1 = new Player(10, 15);
-		Chicken chick1 = new Chicken(15, 11);
-		
-		System.out.println("Cocoricó: <" + chick1.getPosX()  + ", " + chick1.getPosY()  + ">");
+		for(int i=0; i<World.NUMBER_CHICKENS; i++) {
+			System.out.println("Chicken #" + i + " sayin' hello from " + "<"  + 
+								world.getChickens().get(i).getPosX()   + ", " +
+								world.getChickens().get(i).getPosY()   + ">");	
+			
+		}
 		
 		//this is the main loop of the game
 		while(true){
-			inputFromUser(player1);
-			System.out.println("I'm here: <" + player1.getPosX() + ", " + player1.getPosY() + ">" + "Theta:" + player1.getOrientation());
+			for(int i=0; i<World.NUMBER_PLAYERS; i++) {
+				inputFromUser(world.getPlayers().get(i));
+				
+				System.out.println("I'm here: <" + world.getPlayers().get(i).getPosX() + ", " + 
+						world.getPlayers().get(i).getPosY() + ">" + "Theta:" + 
+						world.getPlayers().get(i).getOrientation()+ "Dir <"  +
+						world.getPlayers().get(i).getDirectionX() + ", "     +
+						world.getPlayers().get(i).getDirectionY()+ ">");
+			}
+			
 			//refreshGameStatus();
 			//redrawScene();
 			
