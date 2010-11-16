@@ -1,5 +1,8 @@
 package Game;
 
+import jgame.JGColor;
+import jgame.JGObject;
+
 public abstract class Actor extends JGObject {
     private World world;
 
@@ -12,7 +15,7 @@ public abstract class Actor extends JGObject {
     private int lives;
     private int health;
 
-    public Actor(World world_, double pos_x_, double pos_y_, int collision_ID_, String sprite_) {
+    public Actor(World world_, double pos_x_, double pos_y_, int collision_ID_, String sprite_, String name_) {
         super(
             name_,
             true, // unique
@@ -91,11 +94,11 @@ public abstract class Actor extends JGObject {
     }
 
     public double getPosX() {
-        return this.pos_x;
+        return this.x;
     }
 
     public double getPosY() {
-        return this.pos_y;
+        return this.y;
     }
 
     public double getDirectionX() {
@@ -112,14 +115,14 @@ public abstract class Actor extends JGObject {
 
     // Other functions
     public boolean isAt(int x, int y) {
-        return (this.pos_x == x && this.pos_y == y);
+        return (this.x == x && this.y == y);
     }
 
-    public boolean faceDirectionOfPoint(int x, int y) {
-        int new_direction_x = x - this.pos_x;
-        int new_direction_y = y - this.pos_y;
+    public void faceDirectionOfPoint(int x, int y) {
+        double new_direction_x = x - this.x;
+        double new_direction_y = y - this.y;
 
-        int dist = Math.sqrt(Math.pow(new_direction_x, 2) + Math.pow(new_direction_y, 2));
+        double dist = Math.sqrt(Math.pow(new_direction_x, 2) + Math.pow(new_direction_y, 2));
         new_direction_x /= dist;
         new_direction_y /= dist;
 

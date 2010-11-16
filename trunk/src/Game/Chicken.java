@@ -4,17 +4,17 @@ public class Chicken extends Actor {
     private final static int CHICKEN_GROUP = 2;
     private final static int MAX_SPEED = 5;
 
-    private int x_dest;
-    private int y_dest;
+    private double x_dest;
+    private double y_dest;
     private int chillTimer;
 
     public Chicken(World world_, double x_, double y_) {
-	super(world_, x_, y_, CHICKEN_GROUP, "gfx_chicken");
+    	super(world_, x_, y_, CHICKEN_GROUP, "gfx_chicken");
 
-	x_dest = pos_x;
-	y_dest = pos_y;
+    	x_dest = x;
+    	y_dest = y;
 
-	chillTimer = world.rand.nextInt(100);
+    	chillTimer = world.rand.nextInt(100);
     }
 
     @Override
