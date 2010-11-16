@@ -9,13 +9,18 @@ public abstract class Actor extends JGObject {
     private double speed;
     private double orientation;
 
+    private int width;
+    private int height;
+    private int diameter; // diameter of bounding circle
+
     //direction_x and direction_y are a normalized vector which is the direction where the actor is pointing
     private double direction_x;
     private double direction_y;
     private int lives;
     private int health;
+    private int value;
 
-    public Actor(World world_, double pos_x_, double pos_y_, int collision_ID_, String sprite_, String name_) {
+    public Actor(World world_, double pos_x_, double pos_y_, int collision_ID_, String sprite_, int width_, int height_, String name_, int value_) {
         super(
             name_,
             true, // unique
@@ -28,11 +33,16 @@ public abstract class Actor extends JGObject {
         this.world = world_;
         this.speed = 0;
 
+        this.width = width_;
+        this.height = height_;
+        this.diameter = Math.max(width, height);
+
         //creates the actor pointing to 90 degrees
         this.setOrientation(90);
 
         this.lives = 1;
         this.health = 100;              
+        this.value = value_;
     }
 
     public void move() {
@@ -113,9 +123,22 @@ public abstract class Actor extends JGObject {
         return this.orientation;
     }
 
+    public double getDiameter() {
+        return this.diameter;
+    }
+
     // Other functions
     public boolean isAt(int x, int y) {
         return (this.x == x && this.y == y);
+    }
+
+    private double distance(x1,y1, x2,y2) {
+        return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
+    }
+
+    public boolean collidesWith(Actor other) {
+        return (distance(this.getPosX(),this.getPosY(), other.getPosX(),other.getPosY()) 
+                < (this.getDiameter() + other.getDiameter()));
     }
 
     public void faceDirectionOfPoint(int x, int y) {
@@ -128,5 +151,9 @@ public abstract class Actor extends JGObject {
 
         this.direction_x = new_direction_x;
         this.direction_y = new_direction_y;
+    }
+
+    public void destroy() {
+        // Should be overriden by children.
     }
 }

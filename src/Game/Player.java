@@ -1,18 +1,21 @@
 package Game;
 
 public class Player extends Actor {
-    private final static int PLAYER_GROUP = 1;
-
     private static final double ROTATION_INCREMENT = 5;
     private static final double SPEED_INCREMENT    = 1;
     private static final double SPEED_LIMIT        = 10;
 
     private int score;
 
-    public Player(World world_, double x_, double y_) {
-        super(world_, x_, y_, PLAYER_GROUP, "gfx_player");
+    private final static int PLAYER_GROUP = 1;
+    private final static int PLAYER_WIDTH = 16; 
+    private final static int PLAYER_HEIGHT = 16;
+    private final static int PLAYER_VALUE = 0;
 
-        this.score = 0;
+    public Player(World world_, double x_, double y_) {
+        super(world_, x_, y_, PLAYER_GROUP, "gfx_player", PLAYER_WIDTH, PLAYER_HEIGHT, "player", PLAYER_VALUE);
+
+        this.setScore(0);
     }
 
     @Override
@@ -60,6 +63,10 @@ public class Player extends Actor {
         else if (this.speed < 0) {
             this.speed += DECELERATION_RATE;
         }
+    }
+
+    public void destroy() {
+        // TODO lose life
     }
 
     // Setters

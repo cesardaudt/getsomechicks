@@ -4,7 +4,6 @@ import Game.Chicken;
 import Game.Player;
 import Game.World;
 
-
 public class ChickenGame extends JGEngine {
     private World world;
 
