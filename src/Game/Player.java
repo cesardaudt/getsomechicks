@@ -1,19 +1,19 @@
 package Game;
 
 public class Player extends Actor {
-    private static final double ROTATION_INCREMENT = 5;
-    private static final double SPEED_INCREMENT    = 1;
-    private static final double SPEED_LIMIT        = 10;
+    private static final double ROTATION_INCREMENT = 3;
+    private static final double SPEED_INCREMENT    = 0.01;
+    private static final double SPEED_LIMIT        = 2;
 
     private int score;
+    private boolean isIdle;
 
     private final static int PLAYER_GROUP = 1;
     private final static int PLAYER_WIDTH = 16; 
     private final static int PLAYER_HEIGHT = 16;
-    private final static int PLAYER_VALUE = 0;
 
     public Player(World world_, double x_, double y_) {
-        super(world_, x_, y_, PLAYER_GROUP, "gfx_player", PLAYER_WIDTH, PLAYER_HEIGHT, "player", PLAYER_VALUE);
+        super(world_, x_, y_, PLAYER_GROUP, "gfx_player", PLAYER_WIDTH, PLAYER_HEIGHT, "player");
 
         this.setScore(0);
     }
@@ -26,8 +26,6 @@ public class Player extends Actor {
             // The input loop will set this to true if no key is pressed
             isIdle = false;
         }
-
-	super();
     }
 
     public void speedUp() {
@@ -47,11 +45,11 @@ public class Player extends Actor {
     }
 
     public void rotateRight() {
-        this.setOrientation(this.getOrientation() + ROATATION_INCREMENT);
+        this.setOrientation(this.getOrientation() + ROTATION_INCREMENT);
     }
 
     public void rotateLeft() {
-        this.setOrientation(this.getOrientation() - ROATATION_INCREMENT);
+        this.setOrientation(this.getOrientation() - ROTATION_INCREMENT);
     }
 
     private void decelerate() {

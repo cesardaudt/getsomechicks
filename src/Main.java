@@ -1,57 +1,37 @@
-import java.io.IOException;
-
-import Game.Chicken;
-import Game.Player;
+import jgame.JGColor;
+import jgame.JGPoint;
+import jgame.platform.JGEngine;
 import Game.World;
 
-public class ChickenGame extends JGEngine {
-    private World world;
+@SuppressWarnings("serial")
+public class Main extends JGEngine {
+	
+    private static final int WINDOW_WIDTH = 640;
+	private static final int WINDOW_HEIGHT = 480;
+	private static final int HEIGHT_IN_TILE = 15;
+	private static final int WIDTH_IN_TILE = 20;
+	private static final int TILE_HEIGHT = 16;
+	private static final int TILE_WIDTH = 16;
+	private World world;
 
     public static void main(String[] args) {
-        new ChickenGame(new JGPoint(640, 480));
-
-        //World world = new World();
-
-        //for (int i = 0; i < World.NUMBER_CHICKENS; i++) {
-            //System.out.println("Chicken #" + i + " sayin' hello from " + "<"  + 
-                    //world.getChickens().get(i).getPosX()   + ", " +
-                    //world.getChickens().get(i).getPosY()   + ">");	
-
-        //}
-
-        //// Game loop
-        //while (true) {
-            //// TODO: remove
-            //for(int i = 0; i < World.NUMBER_PLAYERS; i++) {
-                //inputFromUser(world.getPlayers().get(i));
-
-                //System.out.println("I'm here: <" + world.getPlayers().get(i).getPosX() + ", " + 
-                        //world.getPlayers().get(i).getPosY() + ">" + "Theta:" + 
-                        //world.getPlayers().get(i).getOrientation() + "Dir <" +
-                        //world.getPlayers().get(i).getDirectionX() + ", " +
-                        //world.getPlayers().get(i).getDirectionY() + ">");
-            //}
-
-            //world.update();
-            //redraw();
-        //}
-
+        new Main(new JGPoint(WINDOW_WIDTH, WINDOW_HEIGHT));
     }
 
     // App constructor
-    public ChickenGame(JGPoint size) {
+    public Main(JGPoint size) {
         initEngine(size.x, size.y);
     }
 
     // Applet constructor
-    public ChickenGame() {
+    public Main() {
         initEngineApplet();
     }
 
     public void initCanvas() {
         setCanvasSettings(
-                20, 15, // size of canvas in tiles
-                16, 16, // size of each tile
+                WIDTH_IN_TILE, HEIGHT_IN_TILE, // size of canvas in tiles
+                TILE_WIDTH, TILE_HEIGHT, // size of each tile
                 null,   // fg color
                 null,   // bg color
                 null    // standard font (null = use default)
@@ -65,54 +45,30 @@ public class ChickenGame extends JGEngine {
         world = new World();
     }
 
-    // Game logic
+    public void input() {
+    
+    	if (getKey(KeyUp)) {
+        	world.getPlayer().speedUp();
+        }
+        else if (getKey(KeyDown)) {
+        	world.getPlayer().speedDown();//
+        }
+
+        if (getKey(KeyLeft)) {
+        	world.getPlayer().rotateLeft();
+        }
+        else if (getKey(KeyRight)) {
+        	world.getPlayer().rotateRight();
+        }
+    }
+    
     public void doFrame() {
-            world.update();
+    	input();
+        world.update();
+        moveObjects(null,0);
     }
 
     public void paintFrame() {
         //TODO
     }
-
-    //public static void inputFromUser(Player player) {
-
-        //char inKeyboard = ' ';
-
-        //try {
-            //inKeyboard = (char) System.in.read();	
-        //}
-        //catch (IOException e){
-            //System.out.println("Error reading from user");
-        //}
-
-        //switch (inKeyboard) {
-            ////move up
-            //case 'w':
-                //player.speedUp();
-                //break;
-
-            ////break (move backwards)
-            //case 's':
-                //player.speedDown();
-                //break;
-
-            ////turn right
-            //case 'd':	
-                //player.rotateRight();
-                //break;
-
-            ////turn left
-            //case 'a':
-                //player.rotateLeft();
-                //break;
-
-            ////do nothing
-            //default:
-                //player.setIsIdle(true);
-        //}
-    //}
-
-    //public static void redraw() {
-        ////TODO
-    //}
 }

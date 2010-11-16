@@ -1,26 +1,24 @@
 package Game;
 
-import jgame.JGColor;
 import jgame.JGObject;
 
 public abstract class Actor extends JGObject {
-    private World world;
+    protected World world;
 
-    private double speed;
-    private double orientation;
+    protected double speed;
+    protected double orientation;
 
-    private int width;
-    private int height;
-    private int diameter; // diameter of bounding circle
+    protected int width;
+    protected int height;
+    protected int diameter; // diameter of bounding circle
 
     //direction_x and direction_y are a normalized vector which is the direction where the actor is pointing
-    private double direction_x;
-    private double direction_y;
-    private int lives;
-    private int health;
-    private int value;
+    protected double direction_x;
+    protected double direction_y;
+    protected int lives;
+    protected int health;
 
-    public Actor(World world_, double pos_x_, double pos_y_, int collision_ID_, String sprite_, int width_, int height_, String name_, int value_) {
+    public Actor(World world_, double pos_x_, double pos_y_, int collision_ID_, String sprite_, int width_, int height_, String name_) {
         super(
             name_,
             true, // unique
@@ -41,8 +39,15 @@ public abstract class Actor extends JGObject {
         this.setOrientation(90);
 
         this.lives = 1;
-        this.health = 100;              
-        this.value = value_;
+        this.health = 100;
+    }
+    
+    public void update() {
+    	updateSpecific();
+    }
+    
+    public void updateSpecific() {
+    	
     }
 
     public void move() {
@@ -54,8 +59,8 @@ public abstract class Actor extends JGObject {
             this.x = 0;
             this.xspeed = 0;
         }
-        else if (this.x >= World.WIDTH) {
-            this.x = World.WIDTH - 1;
+        else if (this.x >= (world.WIDTH - this.width)) {
+            this.x = world.WIDTH - this.width - 1;
             this.xspeed = 0;
         }
 
@@ -63,8 +68,8 @@ public abstract class Actor extends JGObject {
             this.y = 0;
             this.yspeed = 0;
         }
-        else if (this.y >= World.HEIGHT) {
-            this.y = World.HEIGHT - 1;
+        else if (this.y >= (world.HEIGHT - this.height)) {
+            this.y = world.HEIGHT - this.height - 1;
             this.yspeed = 0;
         }
 
@@ -72,8 +77,8 @@ public abstract class Actor extends JGObject {
     }
 
     public void paint() {
-        setColor(JGColor.yellow);
-        drawOval(x, y, 16, 16, true, true);
+        //setColor(JGColor.yellow);
+        //drawOval(x, y, 16, 16, true, true);
     }
 
     //Setters
@@ -128,11 +133,11 @@ public abstract class Actor extends JGObject {
     }
 
     // Other functions
-    public boolean isAt(int x, int y) {
-        return (this.x == x && this.y == y);
+    public boolean isAt(double xDest, double yDest) {
+        return (this.x == xDest && this.y == yDest);
     }
 
-    private double distance(x1,y1, x2,y2) {
+    private double distance(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
     }
 
@@ -141,9 +146,10 @@ public abstract class Actor extends JGObject {
                 < (this.getDiameter() + other.getDiameter()));
     }
 
-    public void faceDirectionOfPoint(int x, int y) {
-        double new_direction_x = x - this.x;
-        double new_direction_y = y - this.y;
+    //makes the Actor turn towards a given point
+    public void faceDirectionOfPoint(double xDest, double yDest) {
+        double new_direction_x = xDest - this.x;
+        double new_direction_y = yDest - this.y;
 
         double dist = Math.sqrt(Math.pow(new_direction_x, 2) + Math.pow(new_direction_y, 2));
         new_direction_x /= dist;
@@ -154,6 +160,6 @@ public abstract class Actor extends JGObject {
     }
 
     public void destroy() {
-        // Should be overriden by children.
+        // Should be overridden by children.
     }
 }
