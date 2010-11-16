@@ -37,14 +37,15 @@ public class Chicken extends Actor {
     }
 
     private void chooseNewDestination() {
-		this.x_dest = world.rand.nextInt(world.WIDTH);
-		this.y_dest = world.rand.nextInt(world.HEIGHT);
+		this.x_dest = world.rand.nextInt(world.WIDTH  - width  - 1);
+		this.y_dest = world.rand.nextInt(world.HEIGHT - height - 1);
+		
 		chillTimer = world.rand.nextInt(200);
 	
 		faceDirectionOfPoint(x_dest, y_dest);
     }
 
-    public void destroy() {
+    public void destroyActor() {
         // TODO add another chicken
     	remove();
     }

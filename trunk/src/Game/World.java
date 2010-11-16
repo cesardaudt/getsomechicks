@@ -49,7 +49,7 @@ public class World {
 			Chicken current_chicken = iterator.next();
 			if (current_chicken.collidesWith(player)) {
 				player.addToScore(current_chicken.getValue());
-				current_chicken.destroy();
+				current_chicken.destroyActor();
 				chickenList.remove(chickenList.indexOf(current_chicken));
 			}
 		}

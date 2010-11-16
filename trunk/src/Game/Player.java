@@ -63,7 +63,7 @@ public class Player extends Actor {
         }
     }
 
-    public void destroy() {
+    public void destroyActor() {
         // TODO lose life
     }
 
