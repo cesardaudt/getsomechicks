@@ -47,6 +47,7 @@ public class Chicken extends Actor {
 
     public void destroyActor() {
         // TODO add another chicken
+    	//playAudio("cocorico");
     	remove();
     }
 
