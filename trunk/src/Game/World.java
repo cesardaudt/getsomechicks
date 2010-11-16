@@ -47,9 +47,17 @@ public class World {
 	while (iterator.hasNext()) {
 	    iterator.next().update();
 	}
+
+        checkCollisions();
     }
 
     public void checkCollisions() {
-	//TODO
+	iterator = chickenList.iterator();
+	while (iterator.hasNext()) {
+	    if (iterator.collidesWith(player)) {
+                player.addToScore(iterator.getValue());
+                iterator.destroy();
+            }
+	}
     }
 }

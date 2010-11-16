@@ -2,6 +2,9 @@ package Game;
 
 public class Chicken extends Actor {
     private final static int CHICKEN_GROUP = 2;
+    private final static int CHICKEN_WIDTH = 16; 
+    private final static int CHICKEN_HEIGHT = 16;
+    private final static int CHICKEN_VALUE = 10;
     private final static int MAX_SPEED = 5;
 
     private double x_dest;
@@ -9,7 +12,7 @@ public class Chicken extends Actor {
     private int chillTimer;
 
     public Chicken(World world_, double x_, double y_) {
-    	super(world_, x_, y_, CHICKEN_GROUP, "gfx_chicken");
+    	super(world_, x_, y_, CHICKEN_GROUP, "gfx_chicken", CHICKEN_WIDTH, CHICKEN_HEIGHT, "chicken", CHICKEN_VALUE);
 
     	x_dest = x;
     	y_dest = y;
@@ -39,5 +42,9 @@ public class Chicken extends Actor {
 	chillTimer = world.rand.nextInt(200);
 
 	faceDirectionOfPoint(x_dest, y_dest);
+    }
+
+    public void destroy() {
+        // TODO add another chicken
     }
 }
