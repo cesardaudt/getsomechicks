@@ -3,13 +3,13 @@ package Game;
 import java.util.ArrayList;
 
 public class World {
-    public static final int WIDTH           = 600;
-    public static final int HEIGHT          = 600;
-    public static final int NUMBER_CHICKENS = 5;
-    public static final int NUMBER_PLAYERS  = 1;
+    public static final int WIDTH            = 600;
+    public static final int HEIGHT           = 600;
+    public static final int INITIAL_CHICKENS = 5;
 
     protected ArrayList<Chicken> chickenList;
-    protected ArrayList<Player>  playerList;
+
+    private Player player;
 
     protected Random rand = new Random();
 
@@ -18,15 +18,12 @@ public class World {
 	this.playerList  = new ArrayList<Player>();
 
 	//creates the chickens
-	for (int i = 0; i < NUMBER_CHICKENS; i++) {
+	for (int i = 0; i < INITIAL_CHICKENS; i++) {
 	    this.chickenList.add(i, new Chicken(this, rand.nextInt(WIDTH), rand.nextInt(HEIGHT)));
 	}
 
-	//creates the players
-	//TODO: are we going to have multiple players? if so, we need a way to make their controls nonconflicting
-	for (int i = 0; i < NUMBER_PLAYERS; i++) {
-	    this.getPlayerList().add(i, new Player(this, 0, 0));
-	}
+	//creates the player
+        this.player = new Player(this, 0, 0);
     }
 
     public ArrayList<Chicken> getChickenList() {

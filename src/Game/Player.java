@@ -1,12 +1,18 @@
 package Game;
 
 public class Player extends Actor {
+    private final static int PLAYER_GROUP = 1;
+
     private static final double ROTATION_INCREMENT = 5;
     private static final double SPEED_INCREMENT    = 1;
     private static final double SPEED_LIMIT        = 10;
 
+    private int score;
+
     public Player(World world_, double x_, double y_) {
-        super(world_, x_, y_);
+        super(world_, x_, y_, PLAYER_GROUP, "gfx_player");
+
+        this.score = 0;
     }
 
     @Override
@@ -21,7 +27,6 @@ public class Player extends Actor {
 	super();
     }
 
-    // Other functions
     public void speedUp() {
         this.speed += SPEED_INCREMENT;
 
@@ -55,5 +60,21 @@ public class Player extends Actor {
         else if (this.speed < 0) {
             this.speed += DECELERATION_RATE;
         }
+    }
+
+    // Setters
+
+    public void setScore(int new_score) {
+        this.score = new_score;
+    }
+
+    public void addToScore(int points) {
+        this.score += points;
+    }
+
+    // Getters
+
+    public int getScore() {
+        return this.score;
     }
 }
