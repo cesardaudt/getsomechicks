@@ -5,78 +5,115 @@ import Game.Player;
 import Game.World;
 
 
-public class Main {
-    private static World world;
+public class ChickenGame extends JGEngine {
+    private World world;
 
-    public static void inputFromUser(Player player) {
+    public static void main(String[] args) {
+        new ChickenGame(new JGPoint(640, 480));
 
-        char inKeyboard = ' ';
+        //World world = new World();
 
-        try {
-            inKeyboard = (char) System.in.read();	
-        }
-        catch (IOException e){
-            System.out.println("Error reading from user");
-        }
+        //for (int i = 0; i < World.NUMBER_CHICKENS; i++) {
+            //System.out.println("Chicken #" + i + " sayin' hello from " + "<"  + 
+                    //world.getChickens().get(i).getPosX()   + ", " +
+                    //world.getChickens().get(i).getPosY()   + ">");	
 
-        switch (inKeyboard) {
-            //move up
-            case 'w':
-                player.speedUp();
-                break;
+        //}
 
-            //break (move backwards)
-            case 's':
-                player.speedDown();
-                break;
+        //// Game loop
+        //while (true) {
+            //// TODO: remove
+            //for(int i = 0; i < World.NUMBER_PLAYERS; i++) {
+                //inputFromUser(world.getPlayers().get(i));
 
-            //turn right
-            case 'd':	
-                player.rotateRight();
-                break;
+                //System.out.println("I'm here: <" + world.getPlayers().get(i).getPosX() + ", " + 
+                        //world.getPlayers().get(i).getPosY() + ">" + "Theta:" + 
+                        //world.getPlayers().get(i).getOrientation() + "Dir <" +
+                        //world.getPlayers().get(i).getDirectionX() + ", " +
+                        //world.getPlayers().get(i).getDirectionY() + ">");
+            //}
 
-            //turn left
-            case 'a':
-                player.rotateLeft();
-                break;
+            //world.update();
+            //redraw();
+        //}
 
-            //do nothing
-            default:
-                player.setIsIdle(true);
-        }
     }
 
-    public static void redraw() {
+    // App constructor
+    public ChickenGame(JGPoint size) {
+        initEngine(size.x, size.y);
+    }
+
+    // Applet constructor
+    public ChickenGame() {
+        initEngineApplet();
+    }
+
+    public void initCanvas() {
+        setCanvasSettings(
+                20, 15, // size of canvas in tiles
+                16, 16, // size of each tile
+                null,   // fg color
+                null,   // bg color
+                null    // standard font (null = use default)
+        );
+    }
+
+    public void initGame() {
+        setFrameRate(50, 2);
+        defineMedia("media.tbl");
+
+        world = new World();
+    }
+
+    // Game logic
+    public void doFrame() {
+            world.update();
+    }
+
+    public void paintFrame() {
         //TODO
     }
 
-    public static void main(String[] args) {
-        world = new World();
+    //public static void inputFromUser(Player player) {
 
-        for (int i = 0; i < World.NUMBER_CHICKENS; i++) {
-            System.out.println("Chicken #" + i + " sayin' hello from " + "<"  + 
-                    world.getChickens().get(i).getPosX()   + ", " +
-                    world.getChickens().get(i).getPosY()   + ">");	
+        //char inKeyboard = ' ';
 
-        }
+        //try {
+            //inKeyboard = (char) System.in.read();	
+        //}
+        //catch (IOException e){
+            //System.out.println("Error reading from user");
+        //}
 
-        // Game loop
-        while (true) {
-            // TODO: remove
-            for(int i = 0; i < World.NUMBER_PLAYERS; i++) {
-                inputFromUser(world.getPlayers().get(i));
+        //switch (inKeyboard) {
+            ////move up
+            //case 'w':
+                //player.speedUp();
+                //break;
 
-                System.out.println("I'm here: <" + world.getPlayers().get(i).getPosX() + ", " + 
-                        world.getPlayers().get(i).getPosY() + ">" + "Theta:" + 
-                        world.getPlayers().get(i).getOrientation() + "Dir <" +
-                        world.getPlayers().get(i).getDirectionX() + ", " +
-                        world.getPlayers().get(i).getDirectionY() + ">");
-            }
+            ////break (move backwards)
+            //case 's':
+                //player.speedDown();
+                //break;
 
-            world.update();
-            redraw();
-        }
+            ////turn right
+            //case 'd':	
+                //player.rotateRight();
+                //break;
 
-    }
+            ////turn left
+            //case 'a':
+                //player.rotateLeft();
+                //break;
 
+            ////do nothing
+            //default:
+                //player.setIsIdle(true);
+        //}
+    //}
+
+    //public static void redraw() {
+        ////TODO
+    //}
 }
