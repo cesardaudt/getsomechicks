@@ -1,5 +1,6 @@
 package Game;
 
+import jgame.JGColor;
 import jgame.JGObject;
 
 public abstract class Actor extends JGObject {
@@ -15,8 +16,8 @@ public abstract class Actor extends JGObject {
     //direction_x and direction_y are a normalized vector which is the direction where the actor is pointing
     protected double direction_x;
     protected double direction_y;
-    protected int lives;
-    protected int health;
+    
+    protected boolean alive;
 
     public Actor(World world_, double pos_x_, double pos_y_, int collision_ID_, String sprite_, int width_, int height_, String name_) {
         super(
@@ -34,15 +35,14 @@ public abstract class Actor extends JGObject {
         this.width = width_;
         this.height = height_;
         this.diameter = Math.max(width, height);
+        
+        this.alive = true;
 
         //creates the actor pointing to 90 degrees
         this.setOrientation(90);
-
-        this.lives = 1;
-        this.health = 100;
     }
-    
-    public void update() {
+
+	public void update() {
     	updateSpecific();
     }
     
@@ -77,8 +77,13 @@ public abstract class Actor extends JGObject {
     }
 
     public void paint() {
-        //setColor(JGColor.yellow);
-        //drawOval(x, y, 16, 16, true, true);
+//		drawImage(x, y, "neon1", /* regular image parameters */
+//				new JGColor(1.0,1.0,1.0), /* blend colour */
+//				0.5, /* alpha */
+//				orientation, /* rotation */
+//				1.0 + 0.15*Math.sin(orientation*4.3), /* zoom */
+//				true /* relative to playfield */
+//			);
     }
 
     //Setters
@@ -100,8 +105,11 @@ public abstract class Actor extends JGObject {
 
         this.direction_x = Math.cos(Math.toRadians(this.orientation));
         this.direction_y = Math.sin(Math.toRadians(this.orientation));
-
     }
+    
+    public boolean isAlive() {
+		return alive;
+	}
 
     //Getters
     public double getSpeed() {
@@ -131,6 +139,10 @@ public abstract class Actor extends JGObject {
     public double getDiameter() {
         return this.diameter;
     }
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
 
     // Other functions
     

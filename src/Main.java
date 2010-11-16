@@ -15,6 +15,7 @@ public class Main extends JGEngine {
 
     public static void main(String[] args) {
         new Main(new JGPoint(WINDOW_WIDTH, WINDOW_HEIGHT));
+        World.high_score = 0;
     }
 
     // App constructor
@@ -40,39 +41,65 @@ public class Main extends JGEngine {
     public void initGame() {
         setFrameRate(50, 2);
         defineMedia("media.tbl");
-
+        playAudio("music","mainmusic",true);
+        
+		setGameState("Title");
+    }
+    
+    public void newGame() {
         world = new World();
+        setGameState("InGame");
     }
 
     public void input() {
-    
-    	if (getKey(KeyUp)) {
-        	world.getPlayer().speedUp();
-        }
-        else if (getKey(KeyDown)) {
-        	world.getPlayer().speedDown();//
-        }
-
-        if (getKey(KeyLeft)) {
-        	world.getPlayer().rotateLeft();
-        }
-        else if (getKey(KeyRight)) {
-        	world.getPlayer().rotateRight();
-        }
+    	if (world.getPlayer().isAlive()) {
+	    	if (getKey(KeyUp)) {
+	        	world.getPlayer().speedUp();
+	        }
+	        else if (getKey(KeyDown)) {
+	        	world.getPlayer().speedDown();
+	        }
+	
+	        if (getKey(KeyLeft)) {
+	        	world.getPlayer().rotateLeft();
+	        }
+	        else if (getKey(KeyRight)) {
+	        	world.getPlayer().rotateRight();
+	        }
+    	}
     }
     
-    public void doFrame() {
+    public void doFrameTitle() {
+    	if (getKey(' ')) {
+			newGame();
+		}
+    }
+    
+    public void doFrameInGame() {
     	input();
-        world.update();
         moveObjects(null,0);
-        drawScore();
+        world.update();
+        if (!(world.getPlayer().isAlive())) {
+        	gameOver();
+        }
     }
     
-    public void drawScore() {
-    	drawString("Score " + world.getPlayer().getScore(), 20, 20, 1);
+    public void gameOver() {
+    	if (World.high_score < world.getPlayer().getScore()) {
+    		World.high_score = world.getPlayer().getScore();
+    	}
+    	
+    	world = null;
+    	setGameState("Title");
+    	removeObjects(null,0);
+    }
+    
+    public void paintFrameTitle() {
+    	drawImageString("HIGH  " + World.high_score, 0, 200, -1, "font", 32, 0);
     }
 
     public void paintFrame() {
-        //TODO
+    	drawImageString("FUEL  " + world.getPlayer().getFuel(), 0, 150, -1, "font", 32, 0);
+    	drawImageString("SCORE " + world.getPlayer().getScore(), 0, 200, -1, "font", 32, 0);
     }
 }
