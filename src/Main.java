@@ -1,4 +1,3 @@
-import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import Game.World;
@@ -66,6 +65,11 @@ public class Main extends JGEngine {
     	input();
         world.update();
         moveObjects(null,0);
+        drawScore();
+    }
+    
+    public void drawScore() {
+    	drawString("Score " + world.getPlayer().getScore(), 20, 20, 1);
     }
 
     public void paintFrame() {

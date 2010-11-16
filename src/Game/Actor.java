@@ -133,8 +133,10 @@ public abstract class Actor extends JGObject {
     }
 
     // Other functions
+    
     public boolean isAt(double xDest, double yDest) {
-        return (this.x == xDest && this.y == yDest);
+        double dist = distance(this.x,this.y, xDest,yDest);
+        return (Math.abs(dist) < 2);
     }
 
     private double distance(double x1, double y1, double x2, double y2) {
@@ -159,7 +161,7 @@ public abstract class Actor extends JGObject {
         this.direction_y = new_direction_y;
     }
 
-    public void destroy() {
+    public void destroyActor() {
         // Should be overridden by children.
     }
 }
