@@ -1,63 +1,67 @@
 package Game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 
 public class World {
-    public static final int WIDTH            = 600;
-    public static final int HEIGHT           = 600;
-    public static final int INITIAL_CHICKENS = 5;
+	public final int WIDTH            = 320;
+	public final int HEIGHT           = 240;
+	public final int INITIAL_CHICKENS = 5;
+	
+	protected Random rand = new Random();
+	
+	protected ArrayList<Chicken> chickenList;
+	protected Player player;
 
-    protected ArrayList<Chicken> chickenList;
+	public World() {
+		this.chickenList = new ArrayList<Chicken>();
 
-    private Player player;
+		//creates the chickens
+		for (int i = 0; i < INITIAL_CHICKENS; i++) {
+			this.chickenList.add(i, new Chicken(this, rand.nextInt(WIDTH), rand.nextInt(HEIGHT)));
+		}
 
-    protected Random rand = new Random();
-
-    public World() {
-	this.chickenList = new ArrayList<Chicken>();
-	this.playerList  = new ArrayList<Player>();
-
-	//creates the chickens
-	for (int i = 0; i < INITIAL_CHICKENS; i++) {
-	    this.chickenList.add(i, new Chicken(this, rand.nextInt(WIDTH), rand.nextInt(HEIGHT)));
+		//creates the player
+		this.player = new Player(this, 0, 0);
 	}
 
-	//creates the player
-        this.player = new Player(this, 0, 0);
-    }
+	public void update() {
+		Iterator<Chicken> iterator;
+		
+		//updates the chickens
+		iterator = chickenList.iterator();
+		while (iterator.hasNext()) {
+			iterator.next().update();
+		}
 
-    public ArrayList<Chicken> getChickenList() {
-	return chickenList;
-    }
+		//updates the player
+		player.update();
 
-    public ArrayList<Player> getPlayerList() {
-	return playerList;
-    }
-
-    public void update() {
-	Iterator iterator;
-
-	// TODO: refactor? maybe make a new class from arraylist?
-	iterator = chickenList.iterator();
-	while (iterator.hasNext()) {
-	    iterator.next().update();
+		checkCollisions();
 	}
 
-	iterator = playerList.iterator();
-	while (iterator.hasNext()) {
-	    iterator.next().update();
+	public void checkCollisions() {
+		Iterator<Chicken> iterator;
+		
+		iterator = chickenList.iterator();
+		while (iterator.hasNext()) {
+			Chicken current_chicken = iterator.next();
+			if (current_chicken.collidesWith(player)) {
+				player.addToScore(current_chicken.getValue());
+				current_chicken.destroy();
+				chickenList.remove(chickenList.indexOf(current_chicken));
+			}
+		}
+	}
+	
+	//Getters
+	public ArrayList<Chicken> getChickenList() {
+		return chickenList;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 
-        checkCollisions();
-    }
-
-    public void checkCollisions() {
-	iterator = chickenList.iterator();
-	while (iterator.hasNext()) {
-	    if (iterator.collidesWith(player)) {
-                player.addToScore(iterator.getValue());
-                iterator.destroy();
-            }
-	}
-    }
 }
