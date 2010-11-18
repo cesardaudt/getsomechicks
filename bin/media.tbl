@@ -1,0 +1,8 @@
+gfx_chicken		-	0	gfx/chicken.png		-
+gfx_player		-	0	gfx/player.png		-
+
+mainmusic		gfx/crazyfrog.mid
+cocorico		gfx/cocorico.mid
+
+// Define image-based font (basically an image map with letters for images)
+font		gfx/font.gif				0	0	32	20	0	0
