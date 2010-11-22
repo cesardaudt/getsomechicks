@@ -1,22 +1,20 @@
 package Game;
 
-import jgame.JGTimer;
-
 public class Player extends Actor {
-    private static final double ROTATION_INCREMENT = 3;
-    private static final double SPEED_INCREMENT    = 0.01;
-    private static final double SPEED_LIMIT        = 2;
+    private static final double ROTATION_INCREMENT = 4;
+    private static final double SPEED_INCREMENT    = 0.05;
+    private static final double SPEED_LIMIT        = 4;
 
     private int score;
 	protected int fuel;
-    private boolean isIdle;
+    private boolean idle;
 
     private final static int PLAYER_GROUP       = 1;
-    private final static int PLAYER_WIDTH       = 16; 
-    private final static int PLAYER_HEIGHT      = 16;
+    private final static int PLAYER_WIDTH       = 32; 
+    private final static int PLAYER_HEIGHT      = 32;
 	private final static int INITIAL_FUEL       = 700;
 	private final static int FUEL_LEAK_RATE     = 1;
-	private final static int FUEL_RECOVERY_RATE = 25;
+	private final static int FUEL_RECOVERY_RATE = 42;
 
     public Player(World world_, double x_, double y_) {
         super(world_, x_, y_, PLAYER_GROUP, "gfx_player", PLAYER_WIDTH, PLAYER_HEIGHT, "player");
@@ -28,11 +26,8 @@ public class Player extends Actor {
     @Override
     public void update() {
     	if (isAlive()) {
-	        if (isIdle) {
+	        if (isIdle()) {
 	            decelerate();
-	
-	            // The input loop will set this to true if no key is pressed
-	            isIdle = false;
 	        }
 	        
 	        loseFuel();
@@ -55,15 +50,15 @@ public class Player extends Actor {
         }
     }
 
-    public void rotateRight() {
-        this.setOrientation(this.getOrientation() + ROTATION_INCREMENT);
-    }
-
     public void rotateLeft() {
         this.setOrientation(this.getOrientation() - ROTATION_INCREMENT);
     }
 
-    private void decelerate() {
+    public void rotateRight() {
+        this.setOrientation(this.getOrientation() + ROTATION_INCREMENT);
+    }
+
+    public void decelerate() {
         final double DECELERATION_RATE = 0.1;
 
         if (this.speed > 0) {
@@ -104,6 +99,10 @@ public class Player extends Actor {
 	public void setFuel(int fuel) {
 		this.fuel = fuel;
 	}
+	
+	public void setIdle(boolean idle) {
+		this.idle = idle;
+	}
 
     // Getters
 
@@ -114,5 +113,8 @@ public class Player extends Actor {
     public int getFuel() {
 		return this.fuel;
 	}
-
+    
+    public boolean isIdle() {
+    	return this.idle;
+    }
 }

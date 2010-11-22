@@ -1,21 +1,21 @@
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
+import Game.Player;
 import Game.World;
 
 @SuppressWarnings("serial")
 public class Main extends JGEngine {
 	
-    private static final int WINDOW_WIDTH = 640;
-	private static final int WINDOW_HEIGHT = 480;
-	private static final int HEIGHT_IN_TILE = 15;
-	private static final int WIDTH_IN_TILE = 20;
-	private static final int TILE_HEIGHT = 16;
-	private static final int TILE_WIDTH = 16;
+    private static final int WINDOW_WIDTH    = 640;
+	private static final int WINDOW_HEIGHT   = 480;
+	private static final int WIDTH_IN_TILES  = 20;
+	private static final int HEIGHT_IN_TILES = 15;
+	private static final int TILE_WIDTH      = 32;
+	private static final int TILE_HEIGHT     = 32;
 	private World world;
 
     public static void main(String[] args) {
         new Main(new JGPoint(WINDOW_WIDTH, WINDOW_HEIGHT));
-        World.high_score = 0;
     }
 
     // App constructor
@@ -30,7 +30,7 @@ public class Main extends JGEngine {
 
     public void initCanvas() {
         setCanvasSettings(
-                WIDTH_IN_TILE, HEIGHT_IN_TILE, // size of canvas in tiles
+                WIDTH_IN_TILES, HEIGHT_IN_TILES, // size of canvas in tiles
                 TILE_WIDTH, TILE_HEIGHT, // size of each tile
                 null,   // fg color
                 null,   // bg color
@@ -41,8 +41,8 @@ public class Main extends JGEngine {
     public void initGame() {
         setFrameRate(50, 2);
         defineMedia("media.tbl");
-        playAudio("music","mainmusic",true);
         
+        playAudio("music","mainmusic",true);        
 		setGameState("Title");
     }
     
@@ -52,24 +52,30 @@ public class Main extends JGEngine {
     }
 
     public void input() {
-    	if (world.getPlayer().isAlive()) {
-	    	if (getKey(KeyUp)) {
-	        	world.getPlayer().speedUp();
-	        }
-	        else if (getKey(KeyDown)) {
-	        	world.getPlayer().speedDown();
-	        }
-	
-	        if (getKey(KeyLeft)) {
-	        	world.getPlayer().rotateLeft();
-	        }
-	        else if (getKey(KeyRight)) {
-	        	world.getPlayer().rotateRight();
-	        }
+    	Player player = world.getPlayer();
+    	player.setIdle(true);
+    	
+    	if (getKey(KeyUp)) {
+    		player.speedUp();
+    		player.setIdle(false);
+    	}
+    	else if (getKey(KeyDown)) {
+    		player.speedDown();
+    		player.setIdle(false);
+    	}
+
+    	if (getKey(KeyLeft)) {
+    		player.rotateLeft();
+    		player.setIdle(false);
+    	}
+    	else if (getKey(KeyRight)) {
+    		player.rotateRight();
+    		player.setIdle(false);
     	}
     }
     
     public void doFrameTitle() {
+    	// Wait until player presses Space
     	if (getKey(' ')) {
 			newGame();
 		}
@@ -79,27 +85,33 @@ public class Main extends JGEngine {
     	input();
         moveObjects(null,0);
         world.update();
-        if (!(world.getPlayer().isAlive())) {
+        Player player = world.getPlayer();
+        
+        if (!(player.isAlive())) {
         	gameOver();
         }
     }
     
     public void gameOver() {
-    	if (World.high_score < world.getPlayer().getScore()) {
-    		World.high_score = world.getPlayer().getScore();
+        Player player = world.getPlayer();
+        int score = player.getScore();
+        
+    	if (World.getHighScore() < score) {
+    		World.setHighScore(score);
     	}
     	
     	world = null;
     	setGameState("Title");
-    	removeObjects(null,0);
+    	removeObjects(null, 0);
     }
     
     public void paintFrameTitle() {
-    	drawImageString("HIGH  " + World.high_score, 0, 200, -1, "font", 32, 0);
+    	drawImageString("PRESS SPACE",                   20,                 20, -1, "font", 32, 0);
+    	drawImageString("HIGH SCORE " + World.getHighScore(), 20, WINDOW_HEIGHT - 40, -1, "font", 32, 0);
     }
 
     public void paintFrame() {
-    	drawImageString("FUEL  " + world.getPlayer().getFuel(), 0, 150, -1, "font", 32, 0);
-    	drawImageString("SCORE " + world.getPlayer().getScore(), 0, 200, -1, "font", 32, 0);
+    	drawImageString("FUEL  " + world.getPlayer().getFuel(),  20, WINDOW_HEIGHT - 80, -1, "font", 32, 0);
+    	drawImageString("SCORE " + world.getPlayer().getScore(), 20, WINDOW_HEIGHT - 40, -1, "font", 32, 0);
     }
 }

@@ -1,6 +1,5 @@
 package Game;
 
-import jgame.JGColor;
 import jgame.JGObject;
 
 public abstract class Actor extends JGObject {
@@ -13,7 +12,7 @@ public abstract class Actor extends JGObject {
     protected int height;
     protected int diameter; // diameter of bounding circle
 
-    //direction_x and direction_y are a normalized vector which is the direction where the actor is pointing
+    //direction_x and direction_y are a normalized vector representing the direction to which the actor is pointing
     protected double direction_x;
     protected double direction_y;
     
@@ -25,15 +24,15 @@ public abstract class Actor extends JGObject {
             true, // unique
             pos_x_,
             pos_y_,
-            collision_ID_, // determines which objects collide with each objects
+            collision_ID_, // determines which objects collide with each objects (unused)
             sprite_
             );
 
         this.world = world_;
         this.speed = 0;
 
-        this.width = width_;
-        this.height = height_;
+        this.width    = width_;
+        this.height   = height_;
         this.diameter = Math.max(width, height);
         
         this.alive = true;
@@ -43,11 +42,7 @@ public abstract class Actor extends JGObject {
     }
 
 	public void update() {
-    	updateSpecific();
-    }
-    
-    public void updateSpecific() {
-    	
+        // Should be overridden by children.
     }
 
     public void move() {
@@ -75,15 +70,36 @@ public abstract class Actor extends JGObject {
 
         // JGame now adds xspeed and yspeed to x and y
     }
+    
+    public boolean isAt(double xDest, double yDest) {
+        double dist = distance(this.x,this.y, xDest,yDest);
+        return (Math.abs(dist) < 2);
+    }
 
-    public void paint() {
-//		drawImage(x, y, "neon1", /* regular image parameters */
-//				new JGColor(1.0,1.0,1.0), /* blend colour */
-//				0.5, /* alpha */
-//				orientation, /* rotation */
-//				1.0 + 0.15*Math.sin(orientation*4.3), /* zoom */
-//				true /* relative to playfield */
-//			);
+    private double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
+    }
+
+    public boolean collidesWith(Actor other) {
+        return (distance(this.getPosX(),this.getPosY(), other.getPosX(),other.getPosY()) 
+                < (this.getDiameter() + other.getDiameter()));
+    }
+
+    /**makes the Actor turn towards a given point*/
+    public void faceDirectionOfPoint(double xDest, double yDest) {
+        double new_direction_x = xDest - this.x;
+        double new_direction_y = yDest - this.y;
+
+        double dist = Math.sqrt(Math.pow(new_direction_x, 2) + Math.pow(new_direction_y, 2));
+        new_direction_x /= dist;
+        new_direction_y /= dist;
+
+        this.direction_x = new_direction_x;
+        this.direction_y = new_direction_y;
+    }
+
+    public void destroyActor() {
+        // Should be overridden by children.
     }
 
     //Setters
@@ -143,37 +159,4 @@ public abstract class Actor extends JGObject {
 	public void setAlive(boolean alive) {
 		this.alive = alive;
 	}
-
-    // Other functions
-    
-    public boolean isAt(double xDest, double yDest) {
-        double dist = distance(this.x,this.y, xDest,yDest);
-        return (Math.abs(dist) < 2);
-    }
-
-    private double distance(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
-    }
-
-    public boolean collidesWith(Actor other) {
-        return (distance(this.getPosX(),this.getPosY(), other.getPosX(),other.getPosY()) 
-                < (this.getDiameter() + other.getDiameter()));
-    }
-
-    //makes the Actor turn towards a given point
-    public void faceDirectionOfPoint(double xDest, double yDest) {
-        double new_direction_x = xDest - this.x;
-        double new_direction_y = yDest - this.y;
-
-        double dist = Math.sqrt(Math.pow(new_direction_x, 2) + Math.pow(new_direction_y, 2));
-        new_direction_x /= dist;
-        new_direction_y /= dist;
-
-        this.direction_x = new_direction_x;
-        this.direction_y = new_direction_y;
-    }
-
-    public void destroyActor() {
-        // Should be overridden by children.
-    }
 }

@@ -5,23 +5,23 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class World {
-	public static int high_score;
+	public static int high_score = 0;
 	
-	public final int WIDTH            = 320;
-	public final int HEIGHT           = 240;
+	public final int WIDTH            = 640;
+	public final int HEIGHT           = 480;
 	public final int INITIAL_CHICKENS = 2;
-	public final int TOTAL_CHICKENS   = 20;
+	public final int TOTAL_CHICKENS   = 42;
 	public final int CHICKENS_ADDED   = 3;
 	
 	protected Random rand = new Random();
 	
-	protected ArrayList<Chicken> chickenList;
+	protected ArrayList<Chicken> chicken_list;
 	protected Player player;
 	
 	protected int chicken_count;
 
 	public World() {
-		this.chickenList = new ArrayList<Chicken>();
+		this.chicken_list = new ArrayList<Chicken>();
 		chicken_count = TOTAL_CHICKENS;
 
 		addChickens(INITIAL_CHICKENS);
@@ -37,7 +37,7 @@ public class World {
 			Iterator<Chicken> iterator;
 			
 			//updates the chickens
-			iterator = chickenList.iterator();
+			iterator = chicken_list.iterator();
 			while (iterator.hasNext()) {
 				iterator.next().update();
 			}
@@ -49,14 +49,14 @@ public class World {
 	public void checkCollisions() {
 		Iterator<Chicken> iterator;
 		
-		iterator = chickenList.iterator();
+		iterator = chicken_list.iterator();
 		while (iterator.hasNext()) {
 			Chicken current_chicken = iterator.next();
 			if (current_chicken.collidesWith(player)) {
 				player.addToScore(current_chicken.getValue());
 				player.gainFuel();
 				current_chicken.destroyActor();
-				chickenList.remove(chickenList.indexOf(current_chicken));
+				chicken_list.remove(chicken_list.indexOf(current_chicken));
 				
 				if (getChickenList().size() == 0) {
 					addChickens(CHICKENS_ADDED);
@@ -73,17 +73,25 @@ public class World {
 		this.chicken_count -= chickens;
 		
 		for (int i = 0; i < chickens; i++) {
-			this.chickenList.add(i, new Chicken(this, rand.nextInt(WIDTH), rand.nextInt(HEIGHT)));
+			this.chicken_list.add(i, new Chicken(this, rand.nextInt(WIDTH-Chicken.CHICKEN_WIDTH), rand.nextInt(HEIGHT-Chicken.CHICKEN_HEIGHT)));
 		}
 	}
 	
 	//Getters
+	public static int getHighScore() {
+		return high_score;
+	}
+	
 	public ArrayList<Chicken> getChickenList() {
-		return chickenList;
+		return chicken_list;
 	}
 	
 	public Player getPlayer() {
 		return player;
 	}
-
+	
+	//Setters
+	public static void setHighScore(int score) {
+		high_score = score;
+	}
 }
